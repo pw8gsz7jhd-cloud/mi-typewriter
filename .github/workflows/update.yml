@@ -1,0 +1,41 @@
+name: Update Digital Typewriter
+
+on:
+  schedule:
+    # 12:00 UTC = 7:00 AM en Bogotá (UTC-5, sin horario de verano).
+    # Si cambias de zona horaria, ajusta esta hora Y la variable TIMEZONE abajo.
+    - cron: "0 12 * * *"
+  workflow_dispatch: # permite correrlo manualmente desde la pestaña "Actions" en GitHub
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run update script
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          TIMEZONE: "America/Bogota"
+        run: python update_typewriter.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "typewriter-bot"
+          git config user.email "actions@github.com"
+          git add index.html
+          git diff --quiet --cached || git commit -m "Actualización diaria del typewriter"
+          git push
