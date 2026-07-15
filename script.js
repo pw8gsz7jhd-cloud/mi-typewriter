@@ -11,7 +11,7 @@ const today = new Date();
 receiptDate.textContent = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
 
 // --- Typewriter heading ---
-const HEADING_PREFIX = "Nasha's Daily ";
+const HEADING_PREFIX = "Irene's Daily ";
 const ROTATING_WORDS = ['Hell :,(', 'Tasks', 'Summary'];
 const TYPE_DELAY = 90;
 const DELETE_DELAY = 60;
